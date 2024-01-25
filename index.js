@@ -1,7 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
-const cors = require("cors");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
 const compression = require("compression");
@@ -11,7 +10,15 @@ const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(compression());
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 // mongodb connection--
 mongoose
   .connect(process.env.DB)
