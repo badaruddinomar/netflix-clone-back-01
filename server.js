@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(compression());
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 // mongodb connection--
 mongoose
   .connect(process.env.DB)
