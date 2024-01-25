@@ -5,20 +5,22 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const compression = require("compression");
 const watchListRoutes = require("./routes/watchListRouts");
+const cors = require("cors");
+const frontendUrl = process.env.FRONTEND_URL;
 
 const app = express();
+const corsOptions = {
+  origin: frontendUrl,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  // optionsSuccessStatus: 204,
+  optionsSuccessStatus: 200,
+  allowedHeaders: "Content-Type,Authorization",
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(helmet());
 app.use(compression());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+
 // mongodb connection--
 mongoose
   .connect(process.env.DB)
